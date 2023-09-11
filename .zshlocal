@@ -1,7 +1,0 @@
-hx README.md
-cat grade.sh
-ll
-cd tests
-cd ../
-grep dlist *
-cd ../
