@@ -44,4 +44,6 @@ dccthread_t * dccthread_self(void);
  * by the library. */
 const char * dccthread_name(dccthread_t *tid);
 
+void dccthread_scheduler(int dummy);
+
 #endif
