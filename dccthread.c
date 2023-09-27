@@ -46,7 +46,8 @@ dccthread_t *dccthread_create(const char *name, void (*func)(int), int param) {
 }
 
 void dccthread_yield(void) {
-
+    dlist_push_right(readyQueue, dccthread_self());
+    swapcontext(dccthread_self()->uc, managerThread->uc);
 }
 
 dccthread_t *dccthread_self(void) {
