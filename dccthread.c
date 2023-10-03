@@ -63,3 +63,23 @@ void dccthread_scheduler(int dummy) {
         swapcontext(managerThread->uc, currentThread->uc);
     }
 }
+
+void dccthread_exit(void)
+{
+    ucontext_t *nextContext = dccthread_self()->uc->uc_link;
+    if (nextContext == NULL)
+    {
+        free(dccthread_self());
+    }
+    return;
+}
+
+void dccthread_wait(dccthread_t *tid) {
+    // Testa se a thread já terminou. Acredito que, se ela já tiver terminado, ela terá o conteúdo do ponteiro vazio(?) pois a memória é liberada
+    // if (tid->uc == NULL) 
+    // {
+    //     return;
+    // }
+    tid->uc->uc_link = dccthread_self()->uc;
+    swapcontext(dccthread_self()->uc, tid->uc);
+}
