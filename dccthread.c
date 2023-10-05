@@ -5,7 +5,8 @@
 
 struct dccthread {
     ucontext_t *uc;
-    char *name;
+    const char *name;
+    dccthread_t *waiting;
 };
 
 struct dlist *readyQueue = NULL;
@@ -23,6 +24,7 @@ dccthread_t *dccthread_create(const char *name, void (*func)(int), int param) {
     dccthread_t *newThread = malloc(sizeof (dccthread_t));
     newThread->uc = malloc(sizeof (ucontext_t));
     newThread->name = name;
+    newThread->waiting = NULL;
     getcontext(newThread->uc);
 
     if (name == "gerente") {
@@ -31,7 +33,7 @@ dccthread_t *dccthread_create(const char *name, void (*func)(int), int param) {
         newThread->uc->uc_link = managerThread->uc; // set to manager thread
     }
 
-    newThread->uc->uc_stack.ss_sp = malloc(THREAD_STACK_SIZE); //(char *)
+    newThread->uc->uc_stack.ss_sp = malloc(THREAD_STACK_SIZE);
     newThread->uc->uc_stack.ss_size = THREAD_STACK_SIZE;
     makecontext(newThread->uc, func, 1, param);
 
@@ -66,20 +68,10 @@ void dccthread_scheduler(int dummy) {
 
 void dccthread_exit(void)
 {
-    ucontext_t *nextContext = dccthread_self()->uc->uc_link;
-    if (nextContext == NULL)
-    {
-        free(dccthread_self());
-    }
-    return;
+    setcontext(managerThread->uc);
 }
 
 void dccthread_wait(dccthread_t *tid) {
-    // Testa se a thread já terminou. Acredito que, se ela já tiver terminado, ela terá o conteúdo do ponteiro vazio(?) pois a memória é liberada
-    // if (tid->uc == NULL) 
-    // {
-    //     return;
-    // }
-    tid->uc->uc_link = dccthread_self()->uc;
-    swapcontext(dccthread_self()->uc, tid->uc);
+    dccthread_self()->waiting = tid;
+    dccthread_yield();
 }
