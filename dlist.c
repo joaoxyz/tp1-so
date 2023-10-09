@@ -141,3 +141,12 @@ void dlist_set_index(struct dlist *dl, int idx, void *data) /* {{{ */
 	if(!curr) return;
 	curr->data = data;
 } /* }}} */
+
+int dlist_find(struct dlist *dl, void *data, dlist_my_cmp_func cmp) {
+	struct dnode *curr;
+	for(curr = dl->head; curr; curr = curr->next) {
+		if(!curr->data) continue;
+		if(cmp(curr->data, data)) return 1;
+	}
+	return 0;
+}

@@ -19,6 +19,8 @@ do grupo no desenvolvimento do trabalho (os valores devem somar
 
 3. Referências bibliográficas
 
+- https://opensource.com/article/21/10/linux-timers
+
 4. Estruturas de dados
 
   1. Descreva e justifique as estruturas de dados utilizadas para

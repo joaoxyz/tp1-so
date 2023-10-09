@@ -1,7 +1,10 @@
 #ifndef __DCCTHREAD_HEADER__
 #define __DCCTHREAD_HEADER__
 
+#include <ucontext.h>
+#include <stdlib.h>
 #include <time.h>
+#include <signal.h>
 
 typedef struct dccthread dccthread_t;
 
@@ -45,5 +48,9 @@ dccthread_t * dccthread_self(void);
 const char * dccthread_name(dccthread_t *tid);
 
 void dccthread_scheduler(int dummy);
+
+int dccthread_cmp(const dccthread_t *t1, const dccthread_t *t2);
+
+void dccthread_start_timer(void);
 
 #endif

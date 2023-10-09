@@ -14,7 +14,8 @@ struct dnode {
 };
 
 typedef void (*dlist_data_func)(void *data);
-typedef int (*dlist_cmp_func)(const void *e1, const void *e2, void *userdata); 
+typedef int (*dlist_cmp_func)(const void *e1, const void *e2, void *userdata);
+typedef int (*dlist_my_cmp_func)(const void *e1, const void *e2);
 
 struct dlist *dlist_create(void);
 void dlist_destroy(struct dlist *dl, dlist_data_func);
@@ -35,5 +36,7 @@ int dlist_empty(struct dlist *dl);
 void * dlist_get_index(const struct dlist *dl, int idx);
 /* changes the data at index =idx.  does nothing if =idx does not exist. */
 void dlist_set_index(struct dlist *dl, int idx, void *data);
+
+int dlist_find(struct dlist *dl, void *data, dlist_my_cmp_func cmp);
 
 #endif
